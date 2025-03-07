@@ -1,0 +1,386 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "ToDo API",
+    "description": "API for ToDo Application",
+    "version": "1.0"
+  },
+  "produces": [
+    "application/json"
+  ],
+  "host": "localhost:8080",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "basePath": "/api",
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "All operations with users" 
+    },
+    {
+      "name": "To Do",
+      "description": "All operations with To Do's" 
+    }
+  ],
+  "paths": {
+    "/auth": {
+      "post": {
+        "summary": "Creates a new user and returns a JWT",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "Auth"
+        ],
+        "description": "User Sign Up, using `email` `password` and `name`",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "user",
+            "description": "User's name",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "name",
+                "email",
+                "password"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User created"
+          },
+          "400": {
+            "description": "Bad format body"
+          },
+          "500": {
+            "description": "User already exist"
+          }
+        }
+      }
+    },
+    "/auth/signin": {
+      "post": {
+        "summary": "Login a user and returns a JWT",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "Auth"
+        ],
+        "description": "User Sign In, using `email` and `password`",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "user",
+            "description": "User's credential",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "email",
+                "password"
+              ],
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User authenticated"
+          },
+          "400": {
+            "description": "Bad format body"
+          },
+          "500": {
+            "description": "Error authentication"
+          }
+        }
+      }
+    },
+    "/auth/profile": {
+      "get": {
+        "summary": "Get user profie",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "Auth"
+        ],
+        "description": "User profiles, will returns `email` and `name`, addtionally createdAt and updatedAt",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-token",
+            "description": "Needs only user's token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User profile"
+          },
+          "500": {
+            "description": "Error authentication"
+          }
+        }
+      }
+    },
+    "/auth/renew": {
+      "get": {
+        "summary": "Renew User's token session",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "Auth"
+        ],
+        "description": "Will return a new JWT Token",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-token",
+            "description": "Needs only user's token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User Renew token"
+          },
+          "500": {
+            "description": "Error authentication"
+          }
+        }
+      }
+    },
+    "/todos": {
+      "post": {
+        "summary": "Create a new To Do and return it",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "To Do"
+        ],
+        "description": "To Do, using `title`,s`notes` and `status`",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-token",
+            "description": "Needs only user's token"
+          },
+          {
+            "in": "body",
+            "name": "todo",
+            "description": "To Do fields",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "title"
+              ],
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "notes": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "ON_HOLD",
+                    "IN_PROGRESS",
+                    "FINISHED"
+                  ]
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User created"
+          },
+          "400": {
+            "description": "Bad format body"
+          },
+          "500": {
+            "description": "User already exist"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get User's ToDos",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "To Do"
+        ],
+        "description": "Will return the user's ToDos",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-token",
+            "description": "Needs user's token"
+          }
+
+        ],
+        "responses": {
+          "200": {
+            "description": "List of ToDos"
+          },
+          "500": {
+            "description": "Error fetching ToDos"
+          }
+        }
+      }
+    },
+    "/todos/{id}": {
+      "get": {
+        "summary": "Get ToDo By Id",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "To Do"
+        ],
+        "description": "Will return a ToDo given the ID",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-token",
+            "description": "Needs user's token"
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "description": "To Do Id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Specific ToDo"
+          },
+          "500": {
+            "description": "Error fetching ToDos"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a ToDo",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "To Do"
+        ],
+        "description": "Will return a ToDo given the ID",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-token",
+            "description": "Needs user's token"
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "description": "To Do Id",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "todo",
+            "description": "To Do fields",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "title"
+              ],
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "notes": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "ON_HOLD",
+                    "IN_PROGRESS",
+                    "FINISHED"
+                  ]
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Specific ToDo"
+          },
+          "500": {
+            "description": "Error fetching ToDos"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete ToDo By Id",
+        "consumes": [
+          "application/json"
+        ],
+        "tags": [
+          "To Do"
+        ],
+        "description": "Will return ID from deleted Item",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-token",
+            "description": "Needs user's token"
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "description": "To Do Id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Error deleting To Do"
+          }
+        }
+      }
+    }
+  }
+}
