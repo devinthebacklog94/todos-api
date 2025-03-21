@@ -17,7 +17,10 @@ class DBConfig {
             await mongoose.connect(process.env.DB_URL || "");
             console.log(`Database Online on ${process.env.DB_URL} PORT`)
         } catch (error) {
-            throw new Error('Error in DB Connection');
+            let message = "";
+            if (error instanceof Error)
+                message = error.message ? error.message : 'Error in DB Connection';
+            throw new Error(message);
         }
     }
 

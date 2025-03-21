@@ -1,4 +1,4 @@
-import { model, ObjectId, Schema } from "mongoose";
+import { model, Schema } from "mongoose";
 
 enum Status {
     IN_PROGRESS = 'IN_PROGRESS',

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { check, Schema } from "express-validator";
+import { check } from "express-validator";
 
 import { createTodo, deleteTodo, getTodo, getTodos, updateTodo } from "../controllers/todos";
 import { jwtValidation } from "../middlewares/jwtValidation";

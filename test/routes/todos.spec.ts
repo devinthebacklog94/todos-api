@@ -7,13 +7,12 @@ import Server from '../../src/server';
 
 import { UserMock } from "../mocks/user";
 import { TodoMock, TodoMockById, TodoMockCreated } from "../mocks/todos";
-import { Todo } from "../../src/models/todos";
 
 dotenv.config();
 
 let api: request.Agent;
 let server: Server;
-let xToken: String;
+let xToken: string;
 
 describe('Todos Endpoint', () => {
     beforeAll(async () => {

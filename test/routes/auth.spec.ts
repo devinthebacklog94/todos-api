@@ -9,7 +9,7 @@ dotenv.config();
 
 let api: request.Agent;
 let server: Server;
-let xToken: String;
+let xToken: string;
 
 describe('User Auth Endpoint', () => {
     beforeAll(async () => {

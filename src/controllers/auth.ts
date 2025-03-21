@@ -26,7 +26,7 @@ export const signInUser = async (req: Request, res: Response) => {
 
 export const signUpUser = async (req: Request, res: Response) => {
     try {
-        let { id, token } = await signUp(req.body);
+        const { id, token } = await signUp(req.body);
 
         res.status(201).json({
             ok: true,
