@@ -1,7 +1,7 @@
 // express.d.ts
-import { Request } from "express";
+import "express";
 
-declare module "express" {
+declare module "express-serve-static-core"  {
     export interface Request {
         uid?: string;
         name?: string;

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { check } from "express-validator";
+import { check, Schema } from "express-validator";
 
 import { createTodo, deleteTodo, getTodo, getTodos, updateTodo } from "../controllers/todos";
 import { jwtValidation } from "../middlewares/jwtValidation";
@@ -15,10 +15,13 @@ router.get("/", getTodos);
 router.get("/:id", getTodo);
 router.post("/", [
     check('title', `'title' fied is required`).notEmpty(),
+    check('status').isIn(["ON_HOLD","IN_PROGRESS", "FINISHED"]),
     fieldsValidation
 ],
     createTodo);
-router.put("/:id", updateTodo);
+router.put("/:id",
+    check('status').isIn(["ON_HOLD","IN_PROGRESS", "FINISHED"]),
+    fieldsValidation, updateTodo);
 router.delete("/:id", deleteTodo);
 
 

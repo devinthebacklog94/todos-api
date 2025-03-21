@@ -1,33 +1,13 @@
 import { Request, Response } from "express";
-import { getUserProfile, newUser, renewJwtSession, signIn } from "../services/authService";
+import { signUp, renewJwtSession, signIn } from "../services/authService";
 
-
-export const getUser = async (req: Request, res: Response) => {
-    try {
-        const user = await getUserProfile(req.uid);
-
-        res.json({
-            ok: true,
-            user
-        })
-
-    } catch (error) {
-        const msg = error instanceof Error ? error.message : "User not found";
-
-        res.status(500).json({
-            ok: false,
-            msg
-        })
-    }
-}
-
-export const signInUser = async (req: Request, res: Response) => { 
-    const {email, password} = req.body;
+export const signInUser = async (req: Request, res: Response) => {
+    const { email, password } = req.body;
 
     try {
 
-        const { id, token} = await signIn(email, password);
-      
+        const { id, token } = await signIn(email, password);
+
         res.json({
             ok: true,
             id,
@@ -44,17 +24,17 @@ export const signInUser = async (req: Request, res: Response) => {
     }
 }
 
-export const createUser = async (req: Request, res: Response) => {
+export const signUpUser = async (req: Request, res: Response) => {
     try {
-        let {id, token} = await newUser(req.body);
+        let { id, token } = await signUp(req.body);
 
         res.status(201).json({
             ok: true,
-            id, 
+            id,
             token
-        });        
+        });
     } catch (error) {
-        if(error instanceof Error) {
+        if (error instanceof Error) {
             res.status(500).json({
                 ok: false,
                 error: error.message
@@ -65,7 +45,7 @@ export const createUser = async (req: Request, res: Response) => {
 
 
 export const renewSession = async (req: Request, res: Response) => {
-    const {uid} = req;
+    const { uid } = req;
     try {
         const token = await renewJwtSession(uid);
         res.json({
@@ -73,7 +53,7 @@ export const renewSession = async (req: Request, res: Response) => {
             id: uid,
             token
         });
-        
+
     } catch (error) {
         const msg = error instanceof Error ? error.message : "Error Getting user token";
         res.status(500).json({

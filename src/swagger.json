@@ -20,6 +20,10 @@
       "description": "All operations with users" 
     },
     {
+      "name": "User",
+      "description": "Get User information" 
+    },
+    {
       "name": "To Do",
       "description": "All operations with To Do's" 
     }
@@ -121,14 +125,14 @@
         }
       }
     },
-    "/auth/profile": {
+    "/user/profile": {
       "get": {
         "summary": "Get user profie",
         "consumes": [
           "application/json"
         ],
         "tags": [
-          "Auth"
+          "User"
         ],
         "description": "User profiles, will returns `email` and `name`, addtionally createdAt and updatedAt",
         "parameters": [

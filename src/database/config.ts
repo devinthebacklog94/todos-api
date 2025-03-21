@@ -1,6 +1,15 @@
+/** 
+ * @file DBconfig
+ * 
+ * Here we are using a Singleton Pattern
+ * 
+*/
+
 import mongoose from "mongoose";
 
+import * as dotenv from 'dotenv';
 
+dotenv.config();
 class DBConfig {
 
     async connect() {
@@ -12,6 +21,9 @@ class DBConfig {
         }
     }
 
+    async disconnect() {
+        await mongoose.disconnect();
+    }
 }
 
 export default DBConfig;
