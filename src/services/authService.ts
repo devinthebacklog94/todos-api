@@ -8,7 +8,7 @@ interface SignInProps {
     token: string;
 }
 
-export const newUser = async (userBody: User): Promise<{ id: string; token: string; }> => {
+export const signUp = async (userBody: User): Promise<SignInProps> => {
     const { email, password } = userBody;
 
     let user = await UserSchema.findOne({ email });
@@ -46,16 +46,6 @@ export const signIn = async (email: string, password: string): Promise<SignInPro
         id: user.id,
         token
     }
-}
-
-export const getUserProfile = async (id: string | undefined): Promise<User> => {
-    if (!id) throw new Error("Bad request");
-
-    const user = await UserSchema.findById(id);
-
-    if (!user) throw new Error("User not found");
-
-    return user;
 }
 
 export const renewJwtSession = async (id: string | undefined): Promise<string> => {

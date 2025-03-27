@@ -20,7 +20,7 @@ export const getTodo = async (req: Request, res: Response) => {
     try {
         const todo = await getTodoById(id);
 
-        res.json({ todo });
+        res.json(todo);
 
     } catch (error) {
         if (error instanceof Error) {
@@ -36,8 +36,8 @@ export const getTodo = async (req: Request, res: Response) => {
 export const createTodo = async (req: Request, res: Response) => {
     try {
         const todoSaved = await createUserTodo(req.uid, req.body);
-        res.json({
-            msg: "CreatedTodo",
+        res.status(201).json({
+            ok: true,
             created: todoSaved
         })
     } catch (error) {

@@ -15,10 +15,13 @@ router.get("/", getTodos);
 router.get("/:id", getTodo);
 router.post("/", [
     check('title', `'title' fied is required`).notEmpty(),
+    check('status').isIn(["ON_HOLD","IN_PROGRESS", "FINISHED"]),
     fieldsValidation
 ],
     createTodo);
-router.put("/:id", updateTodo);
+router.put("/:id",
+    check('status').isIn(["ON_HOLD","IN_PROGRESS", "FINISHED"]),
+    fieldsValidation, updateTodo);
 router.delete("/:id", deleteTodo);
 
 
