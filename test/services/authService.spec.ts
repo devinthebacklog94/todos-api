@@ -1,6 +1,5 @@
 import UserSchema, { User } from "../../src/models/users";
 import { UserMock } from "../mocks/user";
-import { comparePassword } from "../../src/helpers/passwordHash";
 import { renewJwtSession, signIn, signUp } from "../../src/services/authService";
 
 const MockToken = "ey09fExample";

@@ -8,18 +8,19 @@ interface SignInProps {
 }
 
 export const signUp = async (userBody: User): Promise<SignInProps> => {
-    let { email, password, name } = userBody;
+    const { email, name, password } = userBody;
 
     if (!password || !email || !name) {
         throw new Error("Fields are missing");
     }
 
-    let user = await UserSchema.findOne({ email });
+    const user = await UserSchema.findOne({ email });
 
     if (user?.email) {
         throw new Error("User already exist");
     }
-    password = passwordHash(password);
+
+    userBody.password = passwordHash(password);
 
     const { id, name: userName } = await UserSchema.create(userBody);
 
