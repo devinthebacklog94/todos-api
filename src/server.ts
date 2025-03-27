@@ -66,7 +66,6 @@ class Server {
                     if (err) {
                         reject(err)
                     } else {
-                        console.log("Server closed");
                         resolve();
                     }
                 });

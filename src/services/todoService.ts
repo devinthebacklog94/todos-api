@@ -14,20 +14,17 @@ export const getUserTodos = async (user: string | undefined) => {
 }
 
 export const createUserTodo = async (user: string | undefined, body: Todo): Promise<Document<unknown, {}, Todo>> => {
-    const todo = new TodoSchema(body);
-
     if (!user) throw new Error(`Error getting user information`);
 
-    todo.user = user;
-    const todoSaved = await todo.save();
-
-    return todoSaved;
+    const todoData: Todo = {
+        ...body,
+        user
+    }
+    return TodoSchema.create(todoData);
 }
 
 export const updateUserTodo = async (id: string | undefined, body: Todo) => {
     if (!id) throw new Error(`Error getting Todo information`);
-
-    await getTodoById(id);
 
     const updatedTodo = await TodoSchema.findByIdAndUpdate(id, body, { new: true });
 
@@ -37,7 +34,6 @@ export const updateUserTodo = async (id: string | undefined, body: Todo) => {
 export const removeTodo = async (id: string | undefined): Promise<string> => {
 
     if (!id) throw new Error(`Error getting Todo information`);
-    await getTodoById(id);
 
     await TodoSchema.findByIdAndDelete(id);
 
