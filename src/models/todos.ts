@@ -13,6 +13,7 @@ export interface Todo extends Document {
     createdAt: Date;
     updatedAt: Date;
     user?: string,
+    id?: string,
 }
 
 class TodoSchema {

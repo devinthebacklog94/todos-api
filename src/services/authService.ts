@@ -1,7 +1,6 @@
-import bcrypt from "bcryptjs";
-
 import UserSchema, { User } from "../models/users";
 import { generateJwt } from "../helpers/jwt";
+import { comparePassword, passwordHash } from "../helpers/passwordHash";
 
 interface SignInProps {
     id: string;
@@ -9,24 +8,26 @@ interface SignInProps {
 }
 
 export const signUp = async (userBody: User): Promise<SignInProps> => {
-    const { email, password } = userBody;
+    const { email, name, password } = userBody;
 
-    let user = await UserSchema.findOne({ email });
+    if (!password || !email || !name) {
+        throw new Error("Fields are missing");
+    }
 
-    if (user)
+    const user = await UserSchema.findOne({ email });
+
+    if (user?.email) {
         throw new Error("User already exist");
+    }
 
-    user = new UserSchema(userBody);
+    userBody.password = passwordHash(password);
 
-    const salt = bcrypt.genSaltSync();
-    user.password = bcrypt.hashSync(password, salt);
+    const { id, name: userName } = await UserSchema.create(userBody);
 
-    await user.save();
-
-    const token = await generateJwt(user.id, user.name);
+    const token = await generateJwt(id, userName);
 
     return {
-        id: user.id,
+        id,
         token
     };
 }
@@ -36,7 +37,7 @@ export const signIn = async (email: string, password: string): Promise<SignInPro
 
     if (!user) throw new Error("User not found");
 
-    const isValidPassword = bcrypt.compareSync(password, user.password);
+    const isValidPassword = comparePassword(password, user.password);
 
     if (!isValidPassword) throw new Error("Incorrect password");
 
@@ -49,13 +50,15 @@ export const signIn = async (email: string, password: string): Promise<SignInPro
 }
 
 export const renewJwtSession = async (id: string | undefined): Promise<string> => {
-    if (!id) throw new Error("Error getting UID ");
+    if (!id || id.length === 0) {
+        throw new Error("Error getting UID ");
+    }
 
     const user = await UserSchema.findById(id);
 
-    if(!user) throw new Error("Error getting user name");
+    if (!user) throw new Error("Error getting user name");
 
-    const token = await generateJwt(id, user.name);
+    const token = await generateJwt(id!, user.name);
     return token;
 }
 
